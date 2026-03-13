@@ -9,7 +9,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: WebApplication2
   DOTNET_VERSION: '8.0.x'
-  PROJECT_PATH: ./WebApplication3.csproj
+  PROJECT_PATH: ./WebApplication3.sln
 
 jobs:
   build-and-deploy:
