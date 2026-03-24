@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "MyDotNetApp.csproj",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "publish"
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/" }
+  ]
+}
