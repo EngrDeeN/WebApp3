@@ -2,37 +2,30 @@ pipeline {
     agent any
 
     environment {
-        // Jenkins secret text credentials for Vercel
         VERCEL_TOKEN = credentials('vercel-token')
     }
 
     stages {
-        stage('Install') {
+        stage('Restore & Build .NET') {
             steps {
-                // Install npm dependencies
-                bat 'npm install'
+                echo 'Restoring and building .NET project...'
+                bat 'dotnet restore WebApplication3.sln'
+                bat 'dotnet build WebApplication3.sln -c Release'
             }
         }
 
-        stage('Test') {
+        stage('Publish .NET') {
             steps {
-                // Placeholder for tests
-                echo 'No tests defined'
+                echo 'Publishing .NET project...'
+                bat 'dotnet publish WebApplication3.sln -c Release -o publish'
             }
         }
 
-        stage('Build') {
+        stage('Deploy Frontend to Vercel') {
             steps {
-                // Build project (adjust if using React/Next.js)
-                bat 'npm run build'
-            }
-        }
-
-        stage('Deploy') {
-            steps {
-                // Use npx and pass token correctly for Windows CMD
-                // %VERCEL_TOKEN% works in bat on Windows
-                bat 'npx vercel --prod --confirm --token=%VERCEL_TOKEN%'
+                echo 'Deploying frontend to Vercel...'
+                // Only deploy the wwwroot folder inside publish
+                bat 'npx vercel publish publish/wwwroot --prod --confirm --token=%VERCEL_TOKEN%'
             }
         }
     }
