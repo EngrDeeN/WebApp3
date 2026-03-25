@@ -3,7 +3,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 //Added By Din Muhammad Khan Lt Commander
-//Added By Din Muhammad Khan Lt Commander
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
