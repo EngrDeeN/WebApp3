@@ -1,27 +1,31 @@
-node {
+pipeline {
+    agent any
 
-    stage('Restore') {
-        echo 'Restoring .NET packages...'
-        bat 'dotnet restore'
+    environment {
+        VERCEL_TOKEN = credentials('vercel-token')
     }
 
-    stage('Build') {
-        echo 'Building .NET project...'
-        bat 'dotnet build --configuration Release'
-    }
+    stages {
+        stage('Install') {
+            steps {
+                bat 'npm install'
+            }
+        }
+        stage('Test') {
+            steps {
+                echo 'No Test'
+            }
+        }
+        stage('Build') {
+            steps {
+                bat 'npm run build'
+            }
+        }
 
-    stage('Publish') {
-        echo 'Publishing project...'
-        bat 'dotnet publish -c Release -o publish'
-    }
-
-    stage('Vercel Deploy') {
-        echo 'Deploying to Vercel...'
-        // Use Vercel CLI, token stored in Jenkins env variables
-        bat 'vercel --prod --confirm'
-    }
-
-    stage('Finish') {
-        echo 'Deployment Complete ✅'
+        stage('Deploy') {
+            steps {
+                bat 'npx vercel --prod --yes --token=%VERCEL_TOKEN%'
+            }
+        }
     }
 }
